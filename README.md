@@ -5,7 +5,7 @@ Live score table built using websockets. Simulation starts on first websocket co
 ## Running
 
 To start the database run `docker-compose up`, then run `go mod download` and `go run cmd/server/main.go` to start the project. 
-After that open `localhost:1111` in any web browser.
+After that, open `localhost:1111` in any web browser.
 
 ## Used technologies
 
