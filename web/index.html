@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NBA Scoretable</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+    <script>
+        function renderData(data) {
+            let tableBody = "";
+            data.forEach((item, i) => {
+                tableBody += `
+                <tr>
+                    <td>${i}</td>
+                    <td>${('0' + Math.trunc(item.time/60)).slice(-2)}:${('0' + item.time % 60).slice(-2)}</td>
+                    <td>${item.game.location}</td>
+                    <td>${item.game.teamA.name}</td>
+                    <td>${item.game.teamB.name}</td>
+                    <td>${item.game.scoreA}</td>
+                    <td>${item.game.scoreB}</td>
+                    <td>${item.game.attacks}</td>
+                    <td>${item.game.assists}</td>
+                    <td>${new Date(item.game.startsAt).toISOString()}</td>
+                    <td>${item.game.finishedAt ? new Date(item.game.finishedAt).toISOString() : '-'}</td>
+                </tr>
+                `;
+            });
+
+            document.getElementById("mainBody").innerHTML = tableBody
+        }
+
+        const ws = new WebSocket('ws://localhost:1111/live');
+        ws.onmessage = ev => renderData(JSON.parse(ev.data));
+    </script>
+</head>
+<body style="margin: 15px">
+<h1>NBA Live Score table</h1>
+<table class="pure-table">
+    <thead>
+    <tr>
+        <th>Game</th>
+        <th>Time</th>
+        <th>Location</th>
+        <th>TeamA</th>
+        <th>TeamB</th>
+        <th>ScoreA</th>
+        <th>ScoreB</th>
+        <th>Attacks</th>
+        <th>Assists</th>
+        <th>StartsAt</th>
+        <th>FinishedAt</th>
+    </tr>
+    </thead>
+    <tbody id="mainBody">
+    </tbody>
+</table>
+
+</body>
+</html>
